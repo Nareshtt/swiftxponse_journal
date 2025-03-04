@@ -46,21 +46,18 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class DrillSerializer(serializers.ModelSerializer):
-    strokes = StrokeSerializer(many=True)
+    strokes = serializers.PrimaryKeyRelatedField(many=True, queryset=Stroke.objects.all())
 
     class Meta:
         model = Drill
         fields = '__all__'
 
     def create(self, validated_data):
-        strokes_data = validated_data.pop('strokes', [])
+        strokes = validated_data.pop('strokes', [])
         drill = Drill.objects.create(**validated_data)
-
-        for stroke_data in strokes_data:
-            stroke, _ = Stroke.objects.get_or_create(**stroke_data)
-            drill.strokes.add(stroke)
-
+        drill.strokes.set(strokes)  # Use `.set()` to assign ManyToMany relationships
         return drill
+
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
