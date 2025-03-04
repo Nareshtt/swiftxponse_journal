@@ -3,6 +3,18 @@
 # Player Information
 from django.db import models
 
+class Stroke(models.Model):
+    stroke_name = models.CharField(max_length=255)
+    response = models.CharField(max_length=50)
+    response_from = models.CharField(max_length=50)
+    response_length = models.CharField(max_length=50)
+    placement = models.CharField(max_length=50)
+    placement_length = models.CharField(max_length=50)
+
+class Drill(models.Model):
+    drill_name = models.CharField(max_length=255)
+    strokes = models.ManyToManyField(Stroke)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class PrePractice(models.Model):
     objective = models.TextField()
@@ -15,6 +27,7 @@ class PrePractice(models.Model):
     tactical = models.TextField()
     physical = models.TextField()
     mental = models.TextField()
+    drills = models.ManyToManyField(Drill)  # Many-to-many relation with Drill
     created_at = models.DateTimeField(auto_now_add=True)
 
 class PostPractice(models.Model):
@@ -59,18 +72,7 @@ class PreMatch(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Stroke(models.Model):
-    stroke_name = models.CharField(max_length=255)
-    response = models.CharField(max_length=50)
-    response_from = models.CharField(max_length=50)
-    response_length = models.CharField(max_length=50)
-    placement = models.CharField(max_length=50)
-    placement_length = models.CharField(max_length=50)
 
-class Drill(models.Model):
-    drill_name = models.CharField(max_length=255)
-    strokes = models.ManyToManyField(Stroke)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 class Skill(models.Model):
     player = models.CharField(max_length=50)
