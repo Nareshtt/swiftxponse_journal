@@ -1,274 +1,145 @@
-from django.db import models
+
 
 # Player Information
-class Player(models.Model):
-    name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)  # E.g., U-18, Senior
-    academy_name = models.CharField(max_length=100)
-    dist_or_state = models.CharField(max_length=100)
-    forehand_rubber = models.CharField(max_length=1000)  # Forehand equipment details
-    backhand_rubber = models.CharField(max_length=1000)  # Backhand equipment details
-    blade = models.CharField(max_length=1000)  # Blade details
-
-    def __str__(self):
-        return f"Player: {self.name}"
+from django.db import models
 
 
-# Serve Model
-class Serve(models.Model):
-    player = models.ForeignKey(Player, related_name="serves", on_delete=models.CASCADE)
-    serve_type = models.CharField(max_length=100)  # E.g., Pendulum backspin
-    description = models.TextField(null=True, blank=True)  # Optional notes
-
-    def __str__(self):
-        return f"Serve: {self.serve_type}"
-
-
-# Serve Placement Model
-class ServePlacement(models.Model):
-    serve = models.ForeignKey(Serve, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of serve initiation
-    start_y = models.FloatField()  # Y coordinate of serve initiation
-    end_x = models.FloatField()  # X coordinate of serve placement
-    end_y = models.FloatField()  # Y coordinate of serve placement
-    placement_type = models.CharField(max_length=100, null=True, blank=True)  # E.g., Forehand short, Middle deep
-
-    def __str__(self):
-        return f"ServePlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-
-
-# Receive Model
-class Receive(models.Model):
-    player = models.ForeignKey(Player, related_name="receives", on_delete=models.CASCADE)
-    receive_type = models.CharField(max_length=100)  # E.g., Flick
-    description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Receive: {self.receive_type}"
-
-
-# Receive Placement Model
-class ReceivePlacement(models.Model):
-    receive = models.ForeignKey(Receive, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of receive initiation
-    start_y = models.FloatField()  # Y coordinate of receive initiation
-    end_x = models.FloatField()  # X coordinate of receive placement
-    end_y = models.FloatField()  # Y coordinate of receive placement
-    placement_type = models.CharField(max_length=100, null=True, blank=True)  # E.g., Forehand deep, Middle short
-
-    def __str__(self):
-        return f"ReceivePlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-
-
-# Rally Model
-class Rally(models.Model):
-    player = models.ForeignKey(Player, related_name="rallies", on_delete=models.CASCADE)
-    rally_type = models.CharField(max_length=100)  # E.g., Offensive, Defensive
-    description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Rally: {self.rally_type}"
-
-
-# Rally Placement Model
-class RallyPlacement(models.Model):
-    rally = models.ForeignKey(Rally, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of rally initiation
-    start_y = models.FloatField()  # Y coordinate of rally initiation
-    end_x = models.FloatField()  # X coordinate of rally placement
-    end_y = models.FloatField()  # Y coordinate of rally placement
-
-    def __str__(self):
-        return f"RallyPlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-
-
-# Pre-Practice Model
 class PrePractice(models.Model):
-    obj = models.TextField()  # Objective for the day
-    goals = models.TextField()  # Goals for the session
-    yesterdays_nutrition_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    energy_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    sleep_quality = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    stress_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    motivation_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
+    objective = models.TextField()
+    motivation = models.IntegerField()
+    energy_level = models.IntegerField()
+    nutrition = models.IntegerField()
+    sleep_quality = models.IntegerField()
+    stress = models.IntegerField()
+    technical = models.TextField()
+    tactical = models.TextField()
+    physical = models.TextField()
+    mental = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-# Drill Model
-class Drill(models.Model):
-    pre_practice = models.ForeignKey(PrePractice, related_name="drills", on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)  # Name or description of the drill
-    description = models.TextField(null=True, blank=True)  # Optional overview of the drill
-
-    def __str__(self):
-        return f"Drill: {self.name}"
-
-
-# Stroke Model for Drill
-class Stroke(models.Model):
-    drill = models.ForeignKey(Drill, related_name="strokes", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of the starting point
-    start_y = models.FloatField()  # Y coordinate of the starting point
-    end_x = models.FloatField()  # X coordinate of the ending point
-    end_y = models.FloatField()  # Y coordinate of the ending point
-    action = models.CharField(max_length=100)  # Type of stroke (e.g., serve, flick, winner)
-    description = models.TextField(null=True, blank=True)  # Optional notes about the stroke
-
-    def __str__(self):
-        return f"Stroke: {self.action} ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-
-
-# Post-Practice Model
 class PostPractice(models.Model):
-    emotions_and_reason = models.TextField()
-    focus_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    motivation_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    managing_emotion = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    satisfaction_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    improvement_level = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    areas_of_happy = models.TextField()
-    things_happened = models.TextField()
-    skills_learnt = models.TextField()
-    what_couldve_done_better = models.TextField()
+    emotions = models.TextField()
+    motivation = models.IntegerField()
+    focus = models.IntegerField()
+    managing_emotions = models.IntegerField()
+    satisfaction = models.IntegerField()
+    improvement = models.IntegerField()
+    happy = models.TextField()
+    experiences = models.TextField()
+    skills = models.TextField()
+    done_better = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-
-
-class PlayerProfile(models.Model):
-    player = models.ForeignKey(Player,related_name='player',on_delete=models.CASCADE)
-    tactical_strength = models.TextField()
-    technical_strength = models.TextField()
-    mental_strength = models.TextField()
-    tactical_weakness = models.TextField()
-    technical_weakness = models.TextField()
-    mental_weakness = models.TextField()
-    general_match_strategy = models.TextField()
-
-class MatchDetail(models.Model):
-    tournament = models.CharField(max_length=1000)
-    venue = models.CharField(max_length=1000)
-    date = models.DateField()
-    event = models.CharField(max_length=1000)
-    round = models.CharField(max_length=1000)
-    opponent = models.CharField(max_length=100)
-    academy = models.CharField(max_length=100)
-    playing_hand = models.CharField(max_length=10,choices=[('right', 'Right'), ('left', 'Left')],default='right')
-    dist_or_state = models.CharField(max_length=100)
-    forehand_rubber = models.CharField(max_length=1000)  # Forehand equipment details
-    backhand_rubber = models.CharField(max_length=1000)  # Backhand equipment details
-    blade = models.CharField(max_length=1000)  # Blade details
-    strength = models.TextField()
-    weakness = models.TextField()
-
-class CheckList(models.Model):
-    warmup_physical = models.BooleanField(default=False)
-    warmup_mental = models.BooleanField(default=False)
+class PreMatch(models.Model):
+    class PlayingHand(models.IntegerChoices):
+        RIGHT = 0, "Right-Handed"
+        LEFT = 1, "Left-Handed"
+    tournament =  models.TextField()
+    venue = models.TextField()
+    date = models.DateTimeField()
+    event =  models.TextField()
+    rounds =  models.TextField()
+    opponent_name =  models.TextField()
+    academy =  models.TextField()
+    playing_hand = models.IntegerField(choices=PlayingHand.choices)  # ✅ Corrected
+    fh_rubber =  models.TextField()
+    bh_rubber =  models.TextField()
+    blade =  models.TextField()
+    strengths =  models.TextField()
+    weaknesses =  models.TextField()
+    goals =  models.TextField()
+    plan =  models.TextField()
+    warm_up_physical = models.BooleanField(default=False)
+    warm_up_mental = models.BooleanField(default=False)
     pmr = models.BooleanField(default=False)
     visualization = models.BooleanField(default=False)
     breathing = models.BooleanField(default=False)
     self_talk = models.BooleanField(default=False)
+    keywords =  models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-# Serve Data for Pre-Match
-class ServeMatch(models.Model):
-    match_detail = models.ForeignKey(MatchDetail, related_name="serves", on_delete=models.CASCADE)  # Link to specific match
-    serve_type = models.CharField(max_length=100)  # Type of serve (e.g., Pendulum backspin)
-    description = models.TextField(null=True, blank=True)  # Description of the serve, e.g., "serve to forehand deep"
 
-    def __str__(self):
-        return f"Serve: {self.serve_type}"
-    
-class ServePlacementMatch(models.Model):
-    serve = models.ForeignKey(ServeMatch, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of serve initiation
-    start_y = models.FloatField()  # Y coordinate of serve initiation
-    end_x = models.FloatField()  # X coordinate of serve placement
-    end_y = models.FloatField()  # Y coordinate of serve placement
-    placement_type = models.CharField(max_length=100, null=True, blank=True)  # E.g., Forehand short, Middle deep
+class Stroke(models.Model):
+    stroke_name = models.CharField(max_length=255)
+    response = models.CharField(max_length=50)
+    response_from = models.CharField(max_length=50)
+    response_length = models.CharField(max_length=50)
+    placement = models.CharField(max_length=50)
+    placement_length = models.CharField(max_length=50)
 
-    def __str__(self):
-        return f"ServePlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
+class Drill(models.Model):
+    drill_name = models.CharField(max_length=255)
+    strokes = models.ManyToManyField(Stroke)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-# Receive Data for Pre-Match
-class ReceiveMatch(models.Model):
-    match_detail = models.ForeignKey(MatchDetail, related_name="receives", on_delete=models.CASCADE)  # Link to specific match
-    receive_type = models.CharField(max_length=100)  # Type of receive (e.g., Flick)
-    description = models.TextField(null=True, blank=True)  # Description of the receive, e.g., "flick to forehand deep"
-
-    def __str__(self):
-        return f"Receive: {self.receive_type}"
-    
-class ReceivePlacementMatch(models.Model):
-    receive = models.ForeignKey(ReceiveMatch, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of receive initiation
-    start_y = models.FloatField()  # Y coordinate of receive initiation
-    end_x = models.FloatField()  # X coordinate of receive placement
-    end_y = models.FloatField()  # Y coordinate of receive placement
-    placement_type = models.CharField(max_length=100, null=True, blank=True)  # E.g., Forehand deep, Middle short
+class Skill(models.Model):
+    player = models.CharField(max_length=50)
+    skill_name = models.CharField(max_length=50)
+    stroke_type = models.CharField(max_length=255)
+    placement_from = models.CharField(max_length=50)
+    placement_length = models.CharField(max_length=50)
+    target_placements = models.JSONField(default=list)  # Stores list of placements
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"ReceivePlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
+        return f"{self.skill_name} - {self.stroke_type}"
+    from django.db import models
 
-# Rally Data for Pre-Match
-class RallyMatch(models.Model):
-    match_detail = models.ForeignKey(MatchDetail, related_name="rallies", on_delete=models.CASCADE)  # Link to specific match
-    rally_type = models.CharField(max_length=100)  # Type of rally (e.g., Offensive, Defensive)
-    description = models.TextField(null=True, blank=True)  # Description of the rally, e.g., "long rally with fast pace"
+class Match(models.Model):
+    SET_CHOICES = [(1, "Best of 1"), (3, "Best of 3"), (5, "Best of 5"), (7, "Best of 7")]
 
-    def __str__(self):
-        return f"Rally: {self.rally_type}"
-    
-class RallyPlacementMatch(models.Model):
-    rally = models.ForeignKey(RallyMatch, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of rally initiation
-    start_y = models.FloatField()  # Y coordinate of rally initiation
-    end_x = models.FloatField()  # X coordinate of rally placement
-    end_y = models.FloatField()  # Y coordinate of rally placement
+    match_id = models.AutoField(primary_key=True)
+    num_sets = models.IntegerField(choices=SET_CHOICES)  # Set count (1, 3, 5, 7)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"RallyPlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-    
-class OthersMatch(models.Model):
-    match_detail = models.ForeignKey(MatchDetail, related_name="others", on_delete=models.CASCADE)  # Link to specific match
-    other_type = models.CharField(max_length=100)  # Type of other action (e.g., Pass, Block, Deflect)
-    description = models.TextField(null=True, blank=True)  # Description of the other action, e.g., "pass to opponent's left"
+        return f"Match {self.match_id} - Best of {self.num_sets}"
+
+class Game(models.Model):
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="games")
+    set_number = models.IntegerField()  # Set index (0, 1, 2, etc.)
+    player1_score = models.IntegerField()
+    player2_score = models.IntegerField()
 
     def __str__(self):
-        return f"Other: {self.other_type}"
-    
-class OtherPlacementMatch(models.Model):
-    other = models.ForeignKey(OthersMatch, related_name="placements", on_delete=models.CASCADE)
-    start_x = models.FloatField()  # X coordinate of rally initiation
-    start_y = models.FloatField()  # Y coordinate of rally initiation
-    end_x = models.FloatField()  # X coordinate of rally placement
-    end_y = models.FloatField()
-
-    def __str__(self):
-        return f"OtherPlacement: ({self.start_x}, {self.start_y}) → ({self.end_x}, {self.end_y})"
-
-class PreMatch(models.Model):
-    match_details = models.ForeignKey(MatchDetail,on_delete=models.CASCADE)
-    match_progress_goals = models.TextField()
-    strategies_and_tactics = models.TextField()
-    pre_match_checklist = models.ForeignKey(CheckList, on_delete=models.CASCADE)
-    keywords = models.TextField()
-    serves = models.ManyToManyField(ServeMatch, related_name="pre_matches", blank=True)
-    receives = models.ManyToManyField(ReceiveMatch, related_name="pre_matches", blank=True)
-    rallies = models.ManyToManyField(RallyMatch, related_name="pre_matches", blank=True)
-    others = models.ManyToManyField(OthersMatch, related_name="pre_matches", blank=True)
-
-class SetScore(models.Model):
-    set_number = models.IntegerField()
-    player_1_points = models.IntegerField()
-    player_2_points = models.IntegerField()
+        return f"Match {self.match.match_id} - Set {self.set_number}: {self.player1_score}-{self.player2_score}"
 
 class PostMatch(models.Model):
-    score = models.ForeignKey(SetScore, on_delete=models.CASCADE)
-    won = models.BooleanField(default=False)
-    execution_of_plan = models.TextField()
-    positive_technical = models.TextField()
-    positive_tactical = models.TextField()
-    positive_mental = models.TextField()
-    positive_physical = models.TextField()
-    to_be_improved = models.TextField()
-    different_approach = models.TextField()
+    plans = models.TextField()
+    feed_physical = models.TextField()
+    feed_mental = models.TextField()
+    feed_technical = models.TextField()
+    feed_tactical = models.TextField()
+    improve_physical = models.TextField()
+    improve_mental = models.TextField()
+    improve_technical = models.TextField()
+    improve_tactical = models.TextField()
+    done_better = models.TextField()
     lessons = models.TextField()
-    Notes = models.TextField()
+    notes = models.TextField()
+    player1 = models.CharField(max_length=50)
+    player2 = models.CharField(max_length=50)
+    match = models.OneToOneField("Match", on_delete=models.CASCADE, related_name="post_match")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class PlayerProfile(models.Model):
+    class PlayingHand(models.IntegerChoices):
+        RIGHT = 0, "Right-Handed"
+        LEFT = 1, "Left-Handed"
+    player_name = models.CharField(max_length=50)
+    academy = models.CharField(max_length=50)
+    playing_hand = models.IntegerField(choices=PlayingHand.choices)  # ✅ Corrected
+    fh_rubber = models.CharField(max_length=50)
+    bh_rubber = models.CharField(max_length=50)
+    blade = models.CharField(max_length=50)
+    strength_technical = models.TextField()
+    strength_tactical = models.TextField()
+    strength_mental = models.TextField()
+    weakness_technical = models.TextField()
+    weakness_tactical = models.TextField()
+    weakness_mental = models.TextField()
+    tactics = models.TextField()
+    points_scoring = models.TextField()
+    points_losing = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+

@@ -1,141 +1,45 @@
-from rest_framework.generics import ListCreateAPIView
-from .models import (
-    Player, Serve, ServePlacement, Receive, ReceivePlacement, Rally, RallyPlacement,
-    PrePractice, Drill, Stroke, PostPractice, PlayerProfile, MatchDetail, CheckList,
-    ServeMatch, ServePlacementMatch, ReceiveMatch, ReceivePlacementMatch, RallyMatch,
-    RallyPlacementMatch, OthersMatch, OtherPlacementMatch, PreMatch, SetScore, PostMatch
-)
-from .serializers import (
-    PlayerSerializer, ServeSerializer, ServePlacementSerializer, ReceiveSerializer,
-    ReceivePlacementSerializer, RallySerializer, RallyPlacementSerializer, PrePracticeSerializer,
-    DrillSerializer, StrokeSerializer, PostPracticeSerializer, PlayerProfileSerializer, MatchDetailSerializer,
-    CheckListSerializer, ServeMatchSerializer, ServePlacementMatchSerializer, ReceiveMatchSerializer,
-    ReceivePlacementMatchSerializer, RallyMatchSerializer, RallyPlacementMatchSerializer,
-    OthersMatchSerializer, OtherPlacementMatchSerializer, PreMatchSerializer, SetScoreSerializer,
-    PostMatchSerializer
-)
+from rest_framework.generics import ListCreateAPIView,CreateAPIView
+from .models import PrePractice, Drill,PostPractice,PreMatch,Skill,Match,Game,PostMatch,PlayerProfile
+from django.contrib.auth.models import User
+from .serializers import UserSerializer,PrePracticeSerializer, DrillSerializer,PostPracticeSerializer,PreMatchSerializer,SkillSerializer,MatchSerializer,GameSerializer,PostMatchSerializer,PlayerProfileSerializer
+from rest_framework.permissions import IsAuthenticated,AllowAny
 
-
-class PlayerListCreateAPIView(ListCreateAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
-
-
-class ServeListCreateAPIView(ListCreateAPIView):
-    queryset = Serve.objects.all()
-    serializer_class = ServeSerializer
-
-
-class ServePlacementListCreateAPIView(ListCreateAPIView):
-    queryset = ServePlacement.objects.all()
-    serializer_class = ServePlacementSerializer
-
-
-class ReceiveListCreateAPIView(ListCreateAPIView):
-    queryset = Receive.objects.all()
-    serializer_class = ReceiveSerializer
-
-
-class ReceivePlacementListCreateAPIView(ListCreateAPIView):
-    queryset = ReceivePlacement.objects.all()
-    serializer_class = ReceivePlacementSerializer
-
-
-class RallyListCreateAPIView(ListCreateAPIView):
-    queryset = Rally.objects.all()
-    serializer_class = RallySerializer
-
-
-class RallyPlacementListCreateAPIView(ListCreateAPIView):
-    queryset = RallyPlacement.objects.all()
-    serializer_class = RallyPlacementSerializer
-
-
-class PrePracticeListCreateAPIView(ListCreateAPIView):
+class CreateUserView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+class PrePracticeListCreateView(ListCreateAPIView):
     queryset = PrePractice.objects.all()
     serializer_class = PrePracticeSerializer
 
-
-class DrillListCreateAPIView(ListCreateAPIView):
-    queryset = Drill.objects.all()
-    serializer_class = DrillSerializer
-
-
-class StrokeListCreateAPIView(ListCreateAPIView):
-    queryset = Stroke.objects.all()
-    serializer_class = StrokeSerializer
-
-
-class PostPracticeListCreateAPIView(ListCreateAPIView):
+class PostPracticeListCreateView(ListCreateAPIView):
     queryset = PostPractice.objects.all()
     serializer_class = PostPracticeSerializer
 
+class PreMatchListCreateView(ListCreateAPIView):
+    queryset =PreMatch.objects.all()
+    serializer_class =PreMatchSerializer
 
-class PlayerProfileListCreateAPIView(ListCreateAPIView):
-    queryset = PlayerProfile.objects.all()
+class PostMatchListCreateView(ListCreateAPIView):
+    queryset =PostMatch.objects.all()
+    serializer_class = PostMatchSerializer
+
+class PlayerProfileListCreateView(ListCreateAPIView):
+    queryset =PlayerProfile.objects.all()
     serializer_class = PlayerProfileSerializer
 
+class DrillListCreateView(ListCreateAPIView):
+    queryset = Drill.objects.all()
+    serializer_class = DrillSerializer
 
-class MatchDetailListCreateAPIView(ListCreateAPIView):
-    queryset = MatchDetail.objects.all()
-    serializer_class = MatchDetailSerializer
+class SkillListCreateView(ListCreateAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
 
+class MatchListCreateView(ListCreateAPIView):
+    queryset = Match.objects.all()
+    serializer_class = MatchSerializer
 
-class CheckListListCreateAPIView(ListCreateAPIView):
-    queryset = CheckList.objects.all()
-    serializer_class = CheckListSerializer
-
-
-class ServeMatchListCreateAPIView(ListCreateAPIView):
-    queryset = ServeMatch.objects.all()
-    serializer_class = ServeMatchSerializer
-
-
-class ServePlacementMatchListCreateAPIView(ListCreateAPIView):
-    queryset = ServePlacementMatch.objects.all()
-    serializer_class = ServePlacementMatchSerializer
-
-
-class ReceiveMatchListCreateAPIView(ListCreateAPIView):
-    queryset = ReceiveMatch.objects.all()
-    serializer_class = ReceiveMatchSerializer
-
-
-class ReceivePlacementMatchListCreateAPIView(ListCreateAPIView):
-    queryset = ReceivePlacementMatch.objects.all()
-    serializer_class = ReceivePlacementMatchSerializer
-
-
-class RallyMatchListCreateAPIView(ListCreateAPIView):
-    queryset = RallyMatch.objects.all()
-    serializer_class = RallyMatchSerializer
-
-
-class RallyPlacementMatchListCreateAPIView(ListCreateAPIView):
-    queryset = RallyPlacementMatch.objects.all()
-    serializer_class = RallyPlacementMatchSerializer
-
-
-class OthersMatchListCreateAPIView(ListCreateAPIView):
-    queryset = OthersMatch.objects.all()
-    serializer_class = OthersMatchSerializer
-
-
-class OtherPlacementMatchListCreateAPIView(ListCreateAPIView):
-    queryset = OtherPlacementMatch.objects.all()
-    serializer_class = OtherPlacementMatchSerializer
-
-
-class PreMatchListCreateAPIView(ListCreateAPIView):
-    queryset = PreMatch.objects.all()
-    serializer_class = PreMatchSerializer
-
-
-class SetScoreListCreateAPIView(ListCreateAPIView):
-    queryset = SetScore.objects.all()
-    serializer_class = SetScoreSerializer
-
-
-class PostMatchListCreateAPIView(ListCreateAPIView):
-    queryset = PostMatch.objects.all()
-    serializer_class = PostMatchSerializer
+class GameListCreateView(ListCreateAPIView):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
