@@ -1,7 +1,7 @@
 from rest_framework.generics import ListCreateAPIView,CreateAPIView
-from .models import PrePractice, Drill,PostPractice,PreMatch,Skill,Match,Game,PostMatch,PlayerProfile
+from .models import PrePractice, Drill,PostPractice,PreMatch,Skill,Match,Game,PostMatch,PlayerProfile,Stroke
 from django.contrib.auth.models import User
-from .serializers import UserSerializer,PrePracticeSerializer, DrillSerializer,PostPracticeSerializer,PreMatchSerializer,SkillSerializer,MatchSerializer,GameSerializer,PostMatchSerializer,PlayerProfileSerializer
+from .serializers import UserSerializer,StrokeSerializer,PrePracticeSerializer, DrillSerializer,PostPracticeSerializer,PreMatchSerializer,SkillSerializer,MatchSerializer,GameSerializer,PostMatchSerializer,PlayerProfileSerializer
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
 class CreateUserView(CreateAPIView):
@@ -11,6 +11,9 @@ class CreateUserView(CreateAPIView):
 class PrePracticeListCreateView(ListCreateAPIView):
     queryset = PrePractice.objects.all()
     serializer_class = PrePracticeSerializer
+class StrokeListCreateView(ListCreateAPIView):
+    queryset = Stroke.objects.all()
+    serializer_class = StrokeSerializer
 
 class PostPracticeListCreateView(ListCreateAPIView):
     queryset = PostPractice.objects.all()

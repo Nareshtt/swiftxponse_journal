@@ -9,7 +9,8 @@ from .views import (
     MatchListCreateView,
     GameListCreateView,
     PlayerProfileListCreateView,  # Player profile related endpoints
-    CreateUserView
+    CreateUserView,
+    StrokeListCreateView
 )
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
@@ -33,6 +34,7 @@ urlpatterns = [
     # Skills and Drills
     path("drills/", DrillListCreateView.as_view(), name="drill-list-create"),
     path("skills/", SkillListCreateView.as_view(), name="skill-list-create"),
+    path("strokes/",StrokeListCreateView.as_view(), name="stroke-list-create"),
 
     #Player Profile
     path("player/", PlayerProfileListCreateView.as_view(), name="player-profile-create"),
