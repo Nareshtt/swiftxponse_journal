@@ -69,7 +69,8 @@ class MatchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Match
-        fields = ["id", "num_sets", "created_at", "games"]
+        fields = ["match_id", "num_sets", "created_at", "games"]  # Use match_id instead of id
+
 
 class PostMatchSerializer(serializers.ModelSerializer):
     match_id = serializers.PrimaryKeyRelatedField(
