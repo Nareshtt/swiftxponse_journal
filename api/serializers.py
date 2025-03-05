@@ -60,9 +60,12 @@ class DrillSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
+    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())  # Explicitly reference Match
+
     class Meta:
         model = Game
-        fields = ["id", "set_number", "player1_score", "player2_score"]
+        fields = ["id", "match", "set_number", "player1_score", "player2_score"]
+
 
 class MatchSerializer(serializers.ModelSerializer):
     games = GameSerializer(many=True, read_only=True)  # Nested serializer to include all game scores
