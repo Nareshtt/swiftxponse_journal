@@ -1,0 +1,22 @@
+schemaVersion: "2023-01-31"
+name: "django-app"
+components:
+  - name: "web"
+    type: "web"
+    source:
+      path: "."
+    build:
+      command: "pip install -r requirements.txt"
+    run:
+      command: "gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"
+    env:
+      - name: "DJANGO_SETTINGS_MODULE"
+        value: "myproject.settings"
+      - name: "DATABASE_URL"
+        value: "postgresql://neondb_owner:npg_RPU6jX3qtzic@ep-sweet-mud-a1bowlij-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+    ports:
+      - 8000
+    expose: true
+    resources:
+      cpu: "500m"
+      memory: "512Mi"
