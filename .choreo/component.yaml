@@ -8,7 +8,7 @@ components:
     build:
       command: "pip install -r requirements.txt"
     run:
-      command: "gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"
+      command: "gunicorn cttf_journal.wsgi:application --bind 0.0.0.0:8000"
     env:
       - name: "DJANGO_SETTINGS_MODULE"
         value: "myproject.settings"
