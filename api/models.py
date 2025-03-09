@@ -88,41 +88,41 @@ class Skill(models.Model):
     from django.db import models
 
 class Match(models.Model):
-    SET_CHOICES = [(1, "Best of 1"), (3, "Best of 3"), (5, "Best of 5"), (7, "Best of 7")]
+  SET_CHOICES = [(1, "Best of 1"), (3, "Best of 3"), (5, "Best of 5"), (7, "Best of 7")]
 
-    match_id = models.AutoField(primary_key=True)
-    num_sets = models.IntegerField(choices=SET_CHOICES)  # Set count (1, 3, 5, 7)
-    created_at = models.DateTimeField(auto_now_add=True)
+  match_id = models.AutoField(primary_key=True)
+  num_sets = models.IntegerField(choices=SET_CHOICES)  # Set count (1, 3, 5, 7)
+  created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Match {self.match_id} - Best of {self.num_sets}"
+  def __str__(self):
+      return f"Match {self.match_id} - Best of {self.num_sets}"
 
 class Game(models.Model):
-    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="games")
-    set_number = models.IntegerField()  # Set index (0, 1, 2, etc.)
-    player1_score = models.IntegerField()
-    player2_score = models.IntegerField()
+  match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="games")
+  set_number = models.IntegerField()  # Set index (0, 1, 2, etc.)
+  player1_score = models.IntegerField()
+  player2_score = models.IntegerField()
 
-    def __str__(self):
-        return f"Match {self.match.match_id} - Set {self.set_number}: {self.player1_score}-{self.player2_score}"
+  def __str__(self):
+      return f"Match {self.match.match_id} - Set {self.set_number}: {self.player1_score}-{self.player2_score}"
 
 class PostMatch(models.Model):
-    plans = models.TextField()
-    feed_physical = models.TextField()
-    feed_mental = models.TextField()
-    feed_technical = models.TextField()
-    feed_tactical = models.TextField()
-    improve_physical = models.TextField()
-    improve_mental = models.TextField()
-    improve_technical = models.TextField()
-    improve_tactical = models.TextField()
-    done_better = models.TextField()
-    lessons = models.TextField()
-    notes = models.TextField()
-    player1 = models.CharField(max_length=50)
-    player2 = models.CharField(max_length=50)
-    match = models.OneToOneField("Match", on_delete=models.CASCADE, related_name="post_match")
-    created_at = models.DateTimeField(auto_now_add=True)
+  plans = models.TextField()
+  feed_physical = models.TextField()
+  feed_mental = models.TextField()
+  feed_technical = models.TextField()
+  feed_tactical = models.TextField()
+  improve_physical = models.TextField()
+  improve_mental = models.TextField()
+  improve_technical = models.TextField()
+  improve_tactical = models.TextField()
+  done_better = models.TextField()
+  lessons = models.TextField()
+  notes = models.TextField()
+  player1 = models.CharField(max_length=50)
+  player2 = models.CharField(max_length=50)
+  match = models.OneToOneField("Match", on_delete=models.CASCADE, related_name="post_match")
+  created_at = models.DateTimeField(auto_now_add=True)
 
 class PlayerProfile(models.Model):
     class PlayingHand(models.IntegerChoices):
