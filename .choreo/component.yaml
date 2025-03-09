@@ -11,7 +11,7 @@ components:
       command: "gunicorn cttf_journal.wsgi:application --bind 0.0.0.0:8000"
     env:
       - name: "DJANGO_SETTINGS_MODULE"
-        value: "myproject.settings"
+        value: "cttf_journal.settings"
       - name: "DATABASE_URL"
         value: "postgresql://neondb_owner:npg_RPU6jX3qtzic@ep-sweet-mud-a1bowlij-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
     ports:
