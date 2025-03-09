@@ -1,10 +1,10 @@
-apiVersion: "core.choreo.dev/v1alpha1"
+apiVersion: "core.choreo.dev/v1beta1"
 kind: "ComponentConfig"
 schemaVersion: "2023-01-31"
 name: "django-app"
 components:
   - name: "web"
-    type: "web"
+    type: "service"
     source:
       path: "."
     build:
