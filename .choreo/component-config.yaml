@@ -17,8 +17,14 @@ components:
       - name: "DATABASE_URL"
         value: "postgresql://neondb_owner:npg_RPU6jX3qtzic@ep-sweet-mud-a1bowlij-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
     ports:
-      - 8000
+      - port: 8000
+        protocol: TCP
     expose: true
     resources:
       cpu: "500m"
       memory: "512Mi"
+    ingress:
+      enable: true
+      rules:
+        - path: /
+          port: 8000
